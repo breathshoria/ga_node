@@ -1,42 +1,47 @@
 const express = require('express');
 const cors = require('cors');
-const expHbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 const sequelize = require('./utils/database');
 const errors = require('./controllers/errors');
-const userRoutes = require('./routes/userRoutes');
+const telegramRoutes = require('./routes/telegramRoutes');
 const apiRoutes = require('./routes/apiRoutes');
+const userRoutes = require('./routes/userRoutes');
+const trackerRoutes = require('./routes/trackerRoutes');
+const cookieParser = require('cookie-parser')
+const { authenticateJWT } = require('./utils/verifyJwt')
+const mongoose = require("mongoose");
+require('dotenv').config()
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 const app = express();
 
-app.use(cors());
-app.use(bodyParser.urlencoded({ extended: false }));
+const corsConfig = {
+  credentials: true,
+  origin: true
+}
+
+app.use(cors(corsConfig));
+app.options('*', cors(corsConfig));
+app.use(cookieParser())
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.engine('hbs', expHbs.engine({
-  layoutsDir: 'views/layouts',
-  partialsDir: 'views/partials',
-  defaultLayout: 'base',
-  extname: 'hbs',
-}));
-app.set('view engine', 'hbs');
-app.set('views', 'views');
 app.use(express.static('static'));
 app.use('/', userRoutes);
 app.use('/api', apiRoutes);
+app.use('/telegram',authenticateJWT, telegramRoutes)
+app.use('/tracker', authenticateJWT, trackerRoutes);
 app.use(errors.get404);
 app.use((error, req, res, next) => {
-  console.log(error);
   errors.get500(req, res, next);
 });
 
 (async () => {
   try {
-    await sequelize.sync();
-    await sequelize.authenticate();
+    await mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true })
     app.listen(port);
     console.log('Connection has been established successfully.');
   } catch (error) {
-    console.error('Unable to connect to the database:', error);
+    throw new Error(`Unable to connect to the database: ${error}`);
   }
 })();
+

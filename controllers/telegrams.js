@@ -2,32 +2,23 @@ const Telegram = require('../models/telegram');
 
 exports.addNewTgUser = async (req, res, next) => {
   try {
+    console.log(req.body)
     await Telegram.create({
       chat_id: req.body.chat_id,
       token: req.body.token,
     });
-    res.redirect('/');
+    res.sendStatus(200);
   } catch (err) {
+    res.status(500).send(err)
     next(err);
   }
 };
 
-exports.getAddPage = (req, res, next) => {
+exports.getAllTelegrams = async (req, res, next) => {
   try {
-    res.render('addTelegram', {
-      pageTitle: 'Adding new Telegram User',
-    });
-  } catch (err) {
-    next(err);
-  }
-};
-
-exports.getAllUsersPage = async (req, res, next) => {
-  try {
-    const allUsers = await Telegram.findAll({ raw: true });
-    res.render('index', {
+    const allUsers = await Telegram.find();
+    res.status(200).send({
       users: allUsers || null,
-      pageTitle: 'GA Bot Management',
     });
   } catch (err) {
     next(err);
@@ -36,7 +27,7 @@ exports.getAllUsersPage = async (req, res, next) => {
 
 exports.editInitForm = async (req, res, next) => {
   try {
-    const editUser = await Telegram.findByPk(req.params.id, { raw: true });
+    const editUser = await Telegram.findById(req.params.id);
     res.render('editTelegram', {
       user: editUser,
       pageTitle: 'Editing page',
@@ -46,9 +37,9 @@ exports.editInitForm = async (req, res, next) => {
   }
 };
 
-exports.editUser = async (req, res, next) => {
+exports.editTelegram = async (req, res, next) => {
   try {
-    const user = await Telegram.findByPk(req.params.id);
+    const user = await Telegram.findById(req.params.id);
     user.chat_id = req.body.chat_id;
     user.token = req.body.token;
     await user.save();
@@ -58,10 +49,10 @@ exports.editUser = async (req, res, next) => {
   }
 };
 
-exports.deleteUser = async (req, res, next) => {
+exports.deleteTelegram = async (req, res, next) => {
   try {
-    await Telegram.destroy({ where: { id: req.params.id } });
-    res.redirect('/');
+    await Telegram.deleteOne({_id: req.params.id } );
+    res.status(200).send('OK');
   } catch (err) {
     next(err);
   }

@@ -16,6 +16,7 @@
   "author": "null",
   "license": "ISC",
   "devDependencies": {
+    "crypto": "^1.0.1",
     "eslint": "^8.5.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.25.3",
@@ -23,10 +24,18 @@
   },
   "dependencies": {
     "axios": "^0.24.0",
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.19.1",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "dayjs": "^1.10.7",
+    "dotenv": "^16.0.0",
     "express": "^4.17.2",
     "express-handlebars": "^6.0.2",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "mongodb": "^4.3.1",
+    "mongoose": "^6.2.1",
     "sequelize": "^6.12.1",
     "sqlite3": "^5.0.2"
   }

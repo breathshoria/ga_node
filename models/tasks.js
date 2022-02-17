@@ -1,14 +1,14 @@
 const mongoose = require("mongoose")
 
 const schema = mongoose.Schema({
-  chat_id: {
-    type: String,
+  time: {
+    type: Number,
     required: true,
   },
-  token: {
-    type: String,
+  inWork: {
+    type: Boolean,
     required: true,
   }
 })
 
-module.exports = mongoose.model("Telegrams", schema)
+module.exports = mongoose.model("Task", schema)
