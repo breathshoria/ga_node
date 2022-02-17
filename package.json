@@ -1,0 +1,33 @@
+{
+  "name": "ga_bot_node",
+  "version": "1.0.0",
+  "description": "Node implementation of The Great Acceptor Bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon -L index.js",
+    "start": "node index.js"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "data/*"
+    ]
+  },
+  "author": "null",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.5.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.3",
+    "nodemon": "^2.0.15"
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "body-parser": "^1.19.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.2",
+    "express-handlebars": "^6.0.2",
+    "sequelize": "^6.12.1",
+    "sqlite3": "^5.0.2"
+  }
+}

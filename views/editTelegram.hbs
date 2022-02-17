@@ -1,0 +1,18 @@
+<main class="container-fluid h-100">
+    <div class="row mt-5">
+        <div class="col-md d-flex justify-content-center">
+            <h4>Edit identity</h4>
+        </div>
+    </div>
+    <div class="mt-3 row d-flex  justify-content-center">
+        <div class="col-md-4">
+            <form action="/editUser/{{user.id}}" method="POST">
+                <label for="chat_id" class="form-label">Telegram Identifier</label>
+                <input class="form-control" type="text" name="chat_id" value="{{user.chat_id}}">
+                <label for="token" class="form-label">Telegram Bot Token</label>
+                <input class="form-control" type="text" name="token" value="{{user.token}}">
+                <button class="btn btn-dark mt-3" type="submit">Edit identity</button>
+            </form>
+        </div>
+    </div>
+</main>
