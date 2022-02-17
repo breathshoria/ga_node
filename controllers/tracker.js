@@ -25,7 +25,6 @@ const populateChart = (groupedData, chartData) => {
 
 exports.sendTrack = async (req, res, next) => {
   try {
-    console.log(req.body)
     const time = req.body.time;
     const inWork = req.body.inWork
     await Task.create({
