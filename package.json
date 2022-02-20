@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha 'tests/**/*.js' --recursive --timeout 20000 --exit",
     "dev": "cross-env NODE_ENV=development nodemon -L index.js",
-    "start": "cross-env NODE_ENV=production node index.js"
+    "start": "node index.js"
   },
   "nodemonConfig": {
     "ignore": [
