@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet')
 const bodyParser = require('body-parser');
-const sequelize = require('./utils/database');
 const errors = require('./controllers/errors');
 const telegramRoutes = require('./routes/telegramRoutes');
 const apiRoutes = require('./routes/apiRoutes');
@@ -14,12 +14,18 @@ require('dotenv').config()
 
 const port = process.env.PORT || 3000;
 const app = express();
+const dbHost =
+    process.env.NODE_ENV === 'TEST' ?
+    process.env.TEST_MONGO_URI :
+    process.env.MONGO_URI
+
 
 const corsConfig = {
   credentials: true,
   origin: true
 }
 
+app.use(helmet())
 app.use(cors(corsConfig));
 app.options('*', cors(corsConfig));
 app.use(cookieParser())
@@ -37,11 +43,13 @@ app.use((error, req, res, next) => {
 
 (async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true })
+    await mongoose.connect(dbHost, { useNewUrlParser: true })
     app.listen(port);
     console.log('Connection has been established successfully.');
   } catch (error) {
     throw new Error(`Unable to connect to the database: ${error}`);
   }
 })();
+
+module.exports.server = app;
 

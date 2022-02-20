@@ -85,11 +85,15 @@ exports.refreshToken = async (req, res, next) => {
                     );
                     userToken.accessToken = accessToken
                     await userToken.save()
-                    return res.json({
+                    return res.status(200).json({
                         user: user.username,
                         accessToken
                     });
                 }
+                return res.status(200).json({
+                    user: user.username,
+                    accessToken: req.body.accessToken
+                });
             });
         } else {
             res.sendStatus(401);
@@ -101,7 +105,6 @@ exports.refreshToken = async (req, res, next) => {
 
 exports.getUser = async (req, res, next) => {
     try {
-        console.log(req.cookies)
         if (req.headers.authorization) {
             const token = req.headers.authorization.split(' ')[1];
             jwt.verify(token, process.env.ACCESS_SECRET_KEY,{maxAge: '1d'}, (err, user) => {
