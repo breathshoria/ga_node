@@ -6,6 +6,7 @@ const userControllers = require('../controllers/users');
 
 router.post('/register', userControllers.register);
 router.post('/login', userControllers.login);
+router.get('/logout', userControllers.logout);
 router.get('/refresh', userControllers.refreshToken);
 router.get('/user', userControllers.getUser);
 router.get('/', userControllers.getWelcome);

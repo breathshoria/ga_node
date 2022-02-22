@@ -139,3 +139,20 @@ exports.processTrack = async (req, res, next) => {
     return next(err);
   }
 };
+
+exports.getStats = async (req, res, next) => {
+  try {
+    const tasks = await Task.find()
+    const workedTasks = await Task.find({inWork: true})
+    const estimatedTime = (workedTasks.length / 2) / 60
+    const firstDay = dayjs(tasks[0].time).format('DD/MM/YYYY').toString()
+
+    res.status(200).json({
+      taskAmount: tasks.length || null,
+      estimatedHours: estimatedTime || null,
+      firstDay: firstDay || null
+    })
+  } catch (e) {
+    return next(err)
+  }
+}

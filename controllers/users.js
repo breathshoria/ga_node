@@ -99,6 +99,7 @@ exports.refreshToken = async (req, res, next) => {
             res.sendStatus(401);
         }
     } catch (err) {
+        console.log(err)
         next(err);
     }
 };
@@ -115,6 +116,20 @@ exports.getUser = async (req, res, next) => {
                     user: user.user.username,
                 })
             });
+        } else {
+            res.sendStatus(401);
+        }
+    } catch (err) {
+        next(err);
+    }
+};
+
+exports.logout = async (req, res, next) => {
+    try {
+        if (req.headers.authorization) {
+            const token = req.headers.authorization.split(' ')[1];
+            await Token.deleteOne({accessToken: token})
+            res.sendStatus(200)
         } else {
             res.sendStatus(401);
         }
