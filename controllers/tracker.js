@@ -142,17 +142,46 @@ exports.processTrack = async (req, res, next) => {
 
 exports.getStats = async (req, res, next) => {
   try {
-    const tasks = await Task.find()
-    const workedTasks = await Task.find({inWork: true})
-    const estimatedTime = (workedTasks.length / 2) / 60
-    const firstDay = dayjs(tasks[0].time).format('DD/MM/YYYY').toString()
-
+    const tasks = await Task.aggregate([
+          {
+            $facet: {
+              'overall': [
+                {
+                  $group: {
+                    _id: null,
+                    count: {
+                      $sum: 1
+                    }
+                  }
+                }
+              ],
+              'worked': [
+                {$match: {inWork: true}},
+                {
+                  $group: {
+                    _id: null,
+                    count: {
+                      $sum: 1
+                    }
+                  }
+                }],
+              'firstTask': [
+                {$limit: 1},
+                {$sort: {_id: 1}},
+              ]
+            }
+          }
+        ]
+    )
+    const estimateHours = (tasks[0].worked / 2) / 60
+    const firstDay = dayjs(tasks[0].firstTask.time).format('DD/MM/YYYY').toString()
     res.status(200).json({
-      taskAmount: tasks.length || null,
-      estimatedHours: estimatedTime || null,
+      taskAmount: tasks[0].overall[0].count || null,
+      estimatedHours: estimateHours || null,
       firstDay: firstDay || null
     })
-  } catch (e) {
+  } catch (err) {
+    console.log(err)
     return next(err)
   }
 }
