@@ -173,7 +173,8 @@ exports.getStats = async (req, res, next) => {
           }
         ]
     )
-    const estimateHours = (tasks[0].worked / 2) / 60
+
+    const estimateHours = (tasks[0].worked[0].count / 2) / 60
     const firstDay = dayjs(tasks[0].firstTask.time).format('DD/MM/YYYY').toString()
     res.status(200).json({
       taskAmount: tasks[0].overall[0].count || null,
