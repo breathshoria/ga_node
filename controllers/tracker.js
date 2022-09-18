@@ -1,9 +1,8 @@
 const Task = require("../models/tasks");
 const dayjs = require("dayjs");
-const _ = require("lodash");
 const utc = require("dayjs/plugin/utc");
 const timezone = require("dayjs/plugin/timezone");
-const {compileQueryParser} = require("express/lib/utils");
+
 
 dayjs.extend(utc);
 dayjs.extend(timezone)
@@ -18,10 +17,6 @@ let chartLabels = [
   '18:00', '19:00', '20:00',
   '21:00', '22:00', '23:00'
 ]
-
-//const groupedByHour = (dataset, timezone) => _.groupBy(dataset, (result) => {
-//  return dayjs.utc(result["time"]).tz(timezone).startOf("hour").format("H");
-//});
 
 const toAxisX = (values, diff) => {
   return values
